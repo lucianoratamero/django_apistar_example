@@ -62,3 +62,39 @@ class TestListProducts(TestCase):
         self.assertEqual(2, len(content))
         self.assertIn(schemas.Product(generic_chocolate.__dict__), content)
         self.assertIn(schemas.Product(garoto_chocolate.__dict__), content)
+
+
+class TestCreateProduct(TestCase):
+
+    def setUp(self):
+        self.url = self.reverse_url('list_products')
+
+    def test_returns_400_for_empty_post(self):
+        response = self.client.post(self.url, {})
+        self.assertEqual(400, response.status_code)
+
+    def test_required_fields(self):
+        response = self.client.post(self.url, {'name': 'Chocolate'})
+        self.assertEqual(400, response.status_code)
+        self.assertEqual(b'{"in_stock": "This field is required."}', response.content)
+
+        response = self.client.post(self.url, {'in_stock': False})
+        self.assertEqual(400, response.status_code)
+        self.assertEqual(b'{"name": "This field is required."}', response.content)
+
+    def test_creates_product(self):
+        self.assertEqual(0, models.Product.objects.count())
+        data = {'name': 'Chocolate', 'in_stock': False}
+        expected_data = {
+            'name': 'Chocolate',
+            'in_stock': False,
+            'id': 1,
+            'rating': None,
+            'size': None
+        }
+
+        response = self.client.post(self.url, data)
+
+        self.assertEqual(201, response.status_code)
+        self.assertEqual(1, models.Product.objects.count())
+        self.assertEqual(expected_data, response.json())
