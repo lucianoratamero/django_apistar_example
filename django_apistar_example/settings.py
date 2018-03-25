@@ -116,6 +116,5 @@ STATIC_URL = '/static/'
 django_heroku.settings(locals())
 
 APISTAR_SETTINGS = {
-    'DATABASES': DATABASES,
     'ALLOWED_DJANGO_ROUTES': ('/admin/', '/static/'),
 }
