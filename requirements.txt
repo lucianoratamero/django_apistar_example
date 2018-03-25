@@ -7,7 +7,6 @@ coreschema==0.0.4
 decorator==4.2.1
 dj-database-url==0.5.0
 Django==2.0.3
-django-apistar==0.3.0
 django-heroku==0.3.1
 gunicorn==19.7.1
 idna==2.6
