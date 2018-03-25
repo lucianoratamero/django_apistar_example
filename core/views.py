@@ -47,3 +47,13 @@ def update_product(product_id, data: schemas.ProductUpdate):
     db_products.update(**validated_data)
 
     return validated_data
+
+
+def delete_product(product_id):
+    try:
+        db_product = models.Product.objects.get(id=product_id)
+    except models.Product.DoesNotExist:
+        return http.Response(status=404)
+
+    db_product.delete()
+    return http.Response({'id': product_id}, status=200)

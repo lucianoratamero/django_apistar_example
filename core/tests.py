@@ -134,3 +134,22 @@ class TestUpdateProduct(TestCase):
         self.data.update({'size': 'waay too big'})
         response = self.client.put(self.url, self.data)
         self.assertEqual(400, response.status_code)
+
+
+class TestDeleteProduct(TestCase):
+    def setUp(self):
+        mommy.make(models.Product)
+
+    def test_404_for_unexisting_product(self):
+        url = self.reverse_url('delete_product', product_id=9999)
+        response = self.client.delete(url)
+        self.assertEqual(404, response.status_code)
+
+    def test_200_and_delete_for_existing_product(self):
+        url = self.reverse_url('delete_product', product_id=1)
+        self.assertEqual(1, models.Product.objects.count())
+
+        response = self.client.delete(url)
+
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(0, models.Product.objects.count())
