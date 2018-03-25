@@ -1,6 +1,8 @@
 
 import typing
 
+from apistar import http
+
 from core import schemas
 from core import models
 
@@ -28,3 +30,20 @@ def create_product(product: schemas.Product):
     db_product.save()
 
     return http.Response(schemas.Product(db_product.__dict__), status=201)
+
+
+def update_product(product_id, data: schemas.ProductUpdate):
+    db_products = models.Product.objects.filter(id=product_id)
+
+    try:
+        db_product = db_products.get()
+    except models.Product.DoesNotExist:
+        return http.Response(status=404)
+
+    db_product_data = db_product.__dict__
+    db_product_data.update(data)
+
+    validated_data = schemas.Product(db_product_data)
+    db_products.update(**validated_data)
+
+    return validated_data

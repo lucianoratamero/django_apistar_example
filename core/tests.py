@@ -98,3 +98,39 @@ class TestCreateProduct(TestCase):
         self.assertEqual(201, response.status_code)
         self.assertEqual(1, models.Product.objects.count())
         self.assertEqual(expected_data, response.json())
+
+
+class TestUpdateProduct(TestCase):
+
+    def setUp(self):
+        self.product = mommy.make(
+            models.Product,
+            name='Candy',
+            in_stock=True,
+            rating=3,
+            size='small'
+        )
+        self.url = self.reverse_url('update_product', product_id=1)
+        self.data = {
+            'name': 'Chocolate',
+            'in_stock': False,
+            'rating': 5,
+            'size': 'large',
+        }
+
+    def test_response_404_for_unexistent_product(self):
+        url = self.reverse_url('update_product', product_id=9999)
+        response = self.client.put(url, self.data)
+        self.assertEqual(404, response.status_code)
+
+    def test_updates_product(self):
+        response = self.client.put(self.url, self.data)
+
+        self.data.update({'id': 1})
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(self.data, response.json())
+
+    def test_valitation(self):
+        self.data.update({'size': 'waay too big'})
+        response = self.client.put(self.url, self.data)
+        self.assertEqual(400, response.status_code)
