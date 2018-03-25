@@ -1,3 +1,4 @@
+
 """
 Django settings for django_apistar_example project.
 
@@ -11,6 +12,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -82,11 +84,6 @@ DATABASES = {
     }
 }
 
-APISTAR_SETTINGS = {
-    'DATABASES': DATABASES,
-    'ALLOWED_DJANGO_ROUTES': ('/admin/', '/static/'),
-}
-
 APISTAR_ROUTE_CONF = 'core.routes'
 
 
@@ -115,3 +112,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+django_heroku.settings(locals())
+
+APISTAR_SETTINGS = {
+    'DATABASES': DATABASES,
+    'ALLOWED_DJANGO_ROUTES': ('/admin/', '/static/'),
+}
