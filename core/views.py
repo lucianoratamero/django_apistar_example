@@ -2,6 +2,7 @@
 import typing
 
 from apistar import http
+from apistar.interfaces import Auth
 
 from core import schemas
 from core import models
@@ -13,7 +14,7 @@ def welcome(name=None):
     return {'message': 'Welcome to API Star, %s!' % name}
 
 
-def list_products(name: schemas.ProductName) -> typing.List[schemas.Product]:
+def list_products(name: schemas.ProductName, auth: Auth) -> typing.List[schemas.Product]:
     queryset = models.Product.objects.all()
 
     if name:

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import django_heroku
+from django_apistar.authentication import DjangoBasicAuthentication, DjangoTokenAuthentication
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -39,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'django_apistar',
+    'django_apistar.authentication',
     'core',
 ]
 
@@ -117,4 +120,5 @@ django_heroku.settings(locals())
 
 APISTAR_SETTINGS = {
     'ALLOWED_DJANGO_ROUTES': ('/admin/', '/static/'),
+    'AUTHENTICATION': [DjangoBasicAuthentication(), DjangoTokenAuthentication()]
 }
