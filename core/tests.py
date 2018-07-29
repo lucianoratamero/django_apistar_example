@@ -76,11 +76,11 @@ class TestCreateProduct(TestCase):
     def test_required_fields(self):
         response = self.client.post(self.url, {'name': 'Chocolate'})
         self.assertEqual(400, response.status_code)
-        self.assertEqual(b'{"in_stock": "This field is required."}', response.content)
+        self.assertEqual(b'{"in_stock":"The \\"in_stock\\" field is required."}', response.content)
 
         response = self.client.post(self.url, {'in_stock': False})
         self.assertEqual(400, response.status_code)
-        self.assertEqual(b'{"name": "This field is required."}', response.content)
+        self.assertEqual(b'{"name":"The \\"name\\" field is required."}', response.content)
 
     def test_creates_product(self):
         self.assertEqual(0, models.Product.objects.count())

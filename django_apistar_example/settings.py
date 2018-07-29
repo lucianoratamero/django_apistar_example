@@ -1,4 +1,3 @@
-
 """
 Django settings for django_apistar_example project.
 
@@ -13,7 +12,8 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import django_heroku
-from django_apistar.authentication import DjangoBasicAuthentication, DjangoTokenAuthentication
+from django_apistar.authentication.components import DjangoBasicAuthentication, DjangoTokenAuthentication
+from django_apistar.authentication.hooks import MustBeAuthenticated
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -74,7 +74,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'django_apistar_example.wsgi.application'
+WSGI_APPLICATION = 'django_apistar.wsgi.application'
 
 
 # Database
@@ -118,7 +118,11 @@ STATIC_URL = '/static/'
 
 django_heroku.settings(locals())
 
+
+# If you want to require login, add `EVENT_HOOKS': [MustBeAuthenticated()]` to the settings
+
 APISTAR_SETTINGS = {
     'ALLOWED_DJANGO_ROUTES': ('/admin/', '/static/'),
-    'AUTHENTICATION': [DjangoBasicAuthentication(), DjangoTokenAuthentication()]
+    'AUTH_COMPONENTS': [DjangoBasicAuthentication(), DjangoTokenAuthentication()],
+    'COMPONENTS': [DjangoBasicAuthentication(), DjangoTokenAuthentication()],
 }
