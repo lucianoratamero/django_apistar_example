@@ -14,6 +14,7 @@ import os
 import django_heroku
 from django_apistar.authentication.components import DjangoBasicAuthentication, DjangoTokenAuthentication
 from django_apistar.authentication.hooks import MustBeAuthenticated
+from apistar_cors_hooks import CORSRequestHooks
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -125,4 +126,5 @@ APISTAR_SETTINGS = {
     'ALLOWED_DJANGO_ROUTES': ('/admin/', '/static/'),
     'AUTH_COMPONENTS': [DjangoBasicAuthentication(), DjangoTokenAuthentication()],
     'COMPONENTS': [DjangoBasicAuthentication(), DjangoTokenAuthentication()],
+    'EVENT_HOOKS': [CORSRequestHooks()]
 }
